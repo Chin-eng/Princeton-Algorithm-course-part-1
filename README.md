@@ -26,6 +26,25 @@ public class Percolation {
    public static void main(String[] args)   // test client (optional)
 }
 ```
+Corner cases. By convention, the row and column indices are integers between 1 and n, where (1, 1) is the upper-left site: Throw a java.lang.IllegalArgumentException if any argument to open(), isOpen(), or isFull() is outside its prescribed range. The constructor should throw a java.lang.IllegalArgumentException if n ≤ 0.
+
+Performance requirements. The constructor should take time proportional to n2; all methods should take constant time plus a constant number of calls to the union–find methods union(), find(), connected(), and count().
+
+Monte Carlo simulation. To estimate the percolation threshold, consider the following computational experiment:
+
+Initialize all sites to be blocked. Repeat the following until the system percolates: Choose a site uniformly at random among all blocked sites. Open the site. The fraction of sites that are opened when the system percolates provides an estimate of the percolation threshold.
+
+For example, if sites are opened in a 20-by-20 lattice according to the snapshots below, then our estimate of the percolation threshold is 204/400 = 0.51 because the system percolates when the 204th site is opened.
+<img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/a6125ff4-6023-496e-b1e1-ab8f7619cf98" />
+<img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/a075b6de-f5de-40ca-b7f5-f149a33753b0" />
+<img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/34e2e1d3-8e36-4ede-8289-479ff0376139" />
+<img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/66c38fc3-3f5a-426b-abe4-cccad3640370" />
+
+
+
+
+
+
 
 
 
