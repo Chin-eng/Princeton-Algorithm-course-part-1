@@ -4,8 +4,8 @@ public class Percolation {
     private int[][] Grid;
     private int openCount; 
     private WeightedQuickUnionUF unionFind; 
-    private int virtualTopIndex;
-    private int virtualBottomIndex; 
+    private int virtualTopNode;
+    private int virtualBottomNode; 
 
 
     // creates n-by-n grid, with all sites initially blocked
@@ -16,17 +16,17 @@ public class Percolation {
 
         this.Grid = new int[n][n];
         this.openCount = 0;
-        this.virtualTopIndex = 0; 
-        this.virtualBottomIndex = n * n + 1; 
+        this.virtualTopNode = 0; 
+        this.virtualBottomNode = n * n + 1; 
         this.unionFind = new WeightedQuickUnionUF(n*n + 2);
        
         for (int col = 1; col <= n; col++) {
-            unionFind.union(virtualTopIndex, col);
+            unionFind.union(virtualTopNode, col);
         }
 
         for (int col = 1; col <= n; col++) {
             int bottomRowIndex = (n-1) * n + col;
-            unionFind.union(virtualBottomIndex, bottomRowIndex);
+            unionFind.union(virtualBottomNode, bottomRowIndex);
         }
 
     }   
@@ -77,7 +77,7 @@ public class Percolation {
         if ((row-1) < 0 && (col-1) < 0) {
             throw new IllegalArgumentException("row and col must be valid!");
         }
-        return false;
+        return isOpen(row, col) && (unionFind.find(virtualTopNode) == unionFind.find(row * Grid[0].length + col));
     }
 
     // returns the number of open sites
@@ -87,7 +87,7 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return false;
+        return (unionFind.find(virtualTopNode) == unionFind.find(virtualBottomNode));
     }
 
     // test client (optional)
