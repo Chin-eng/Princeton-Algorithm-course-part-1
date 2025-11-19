@@ -1,7 +1,9 @@
+import java.util.Arrays;
+
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    private int[][] Grid;
+    static int[][] Grid;
     private int openCount; 
     private WeightedQuickUnionUF unionFind; 
     private int virtualTopNode;
@@ -14,20 +16,11 @@ public class Percolation {
             throw new IllegalArgumentException("gird value must be more than 0");        
         }
 
-        this.Grid = new int[n][n];
+        Grid = new int[n][n];
         this.openCount = 0;
         this.virtualTopNode = 0; 
         this.virtualBottomNode = n * n + 1; 
-        this.unionFind = new WeightedQuickUnionUF(n*n + 2);
-       
-        for (int col = 1; col <= n; col++) {
-            unionFind.union(virtualTopNode, col);
-        }
-
-        for (int col = 1; col <= n; col++) {
-            int bottomRowIndex = (n-1) * n + col;
-            unionFind.union(virtualBottomNode, bottomRowIndex);
-        }
+        this.unionFind = new WeightedQuickUnionUF(n*n+2);
 
     }   
 
@@ -44,17 +37,25 @@ public class Percolation {
 
         Grid[row-1][col-1] = 1;
         this.openCount++;
-        
+
+        if (isOpen(row, col) && (row == 1)) {
+            unionFind.union(col, virtualTopNode);
+        }
+
+        if (isOpen(row, col) && row == Grid.length) {
+            unionFind.union((row-1) * Grid.length + col, virtualBottomNode);
+        }
+
         int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
         for (int[] dir : directions) {
             int dx = (row-1) + dir[0];
             int dy = (col-1) + dir[1];
 
-            if (dx >= 0 && dx < Grid.length && dy >= 0 && dy < Grid[0].length) {
+            if (dx >= 0 && dx < Grid.length && dy >= 0 && dy < Grid.length) {
                 if (Grid[dx][dy] == 1) {
-                    int dydx = dx * Grid[0].length + dy;
-                    int xy = row * Grid[0].length + col;                    
+                    int dydx = dx * Grid[0].length + (dy + 1);
+                    int xy = (row-1) * Grid[0].length + col;                    
                     unionFind.union(dydx, xy);
                 }
             }
@@ -77,7 +78,7 @@ public class Percolation {
         if ((row-1) < 0 && (col-1) < 0) {
             throw new IllegalArgumentException("row and col must be valid!");
         }
-        return isOpen(row, col) && (unionFind.find(virtualTopNode) == unionFind.find(row * Grid[0].length + col));
+        return isOpen(row, col) && (unionFind.find(virtualTopNode) == unionFind.find((row-1) * Grid[0].length + col));
     }
 
     // returns the number of open sites
@@ -92,11 +93,17 @@ public class Percolation {
 
     // test client (optional)
     public static void main(String[] args) {
-        int n = 5; 
+        int n = 3; 
         Percolation perc = new Percolation(n);
-        perc.open(5,5);
+        perc.open(1,1);
+        perc.open(1,2);
+        perc.open(2,2);
+        perc.open(3,2);
 
-        System.out.println("percolation: " + perc.isOpen(10, 10));
+        System.out.println(Arrays.deepToString(Grid));
+        System.out.println("open sites: " + perc.numberOfOpenSites());
+        System.out.println("IsFull: " + perc.isFull(2, 2));
+        System.out.println("percolation: " + perc.percolates());
 
     }
 }
