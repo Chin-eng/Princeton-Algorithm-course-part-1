@@ -41,6 +41,70 @@ For example, if sites are opened in a 20-by-20 lattice according to the snapshot
 <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/34e2e1d3-8e36-4ede-8289-479ff0376139" />
 <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/66c38fc3-3f5a-426b-abe4-cccad3640370" />
 
+By repeating this computation experiment T times and averaging the results, we obtain a more accurate estimate of the percolation threshold. Let xt be the fraction of open sites in computational experiment t. The sample mean provides an estimate of the percolation threshold; the sample standard deviation s measures the sharpness of the threshold.
+
+<img width="1037" height="107" alt="image" src="https://github.com/user-attachments/assets/78a8f431-8148-4358-8272-42c2090c8074" />
+Assuming T is sufficiently large (say, at least 30), the following provides a 95% confidence interval for the
+percolation threshold: <img width="381" height="115" alt="image" src="https://github.com/user-attachments/assets/5f4424f4-43ab-41fe-b8b0-38f54a9f2de2" />
+
+To perform a series of computational experiments, create a data type PercolationStats with the following API.
+
+```
+public class PercolationStats {
+   public PercolationStats(int n, int trials)    // perform trials independent experiments on an n-by-n grid
+   public double mean()                          // sample mean of percolation threshold
+   public double stddev()                        // sample standard deviation of percolation threshold
+   public double confidenceLo()                  // low  endpoint of 95% confidence interval
+   public double confidenceHi()                  // high endpoint of 95% confidence interval
+
+   public static void main(String[] args)        // test client (described below)
+}
+```
+
+The constructor should throw a java.lang.IllegalArgumentException if either n ≤ 0 or trials ≤ 0.
+
+Also, include a main() method that takes two command-line arguments n and T, performs T independent computational experiments (discussed above) on an n-by-n grid, and prints the sample mean, sample standard deviation, and the 95% confidence interval for the percolation threshold. Use StdRandom to generate random numbers; use StdStats to compute the sample mean and sample standard deviation.
+
+```
+% java-algs4 PercolationStats 200 100
+mean                    = 0.5929934999999997
+stddev                  = 0.00876990421552567
+95% confidence interval = [0.5912745987737567, 0.5947124012262428]
+
+% java-algs4 PercolationStats 200 100
+mean                    = 0.592877
+stddev                  = 0.009990523717073799
+95% confidence interval = [0.5909188573514536, 0.5948351426485464]
+
+
+% java-algs4 PercolationStats 2 10000
+mean                    = 0.666925
+stddev                  = 0.11776536521033558
+95% confidence interval = [0.6646167988418774, 0.6692332011581226]
+
+% java-algs4 PercolationStats 2 100000
+mean                    = 0.6669475
+stddev                  = 0.11775205263262094
+95% confidence interval = [0.666217665216461, 0.6676773347835391]
+```
+Analysis of running time and memory usage (optional and not graded). Implement the Percolation data type using the quick find algorithm in QuickFindUF.
+
+Use Stopwatch to measure the total running time of PercolationStats for various values of n and T. How does doubling n affect the total running time? How does doubling T affect the total running time? Give a formula (using tilde notation) of the total running time on your computer (in seconds) as a single function of both n and T.
+
+Using the 64-bit memory-cost model from lecture, give the total memory usage in bytes (using tilde notation) that a Percolation object uses to model an n-by-n percolation system. Count all memory that is used, including memory for the union–find data structure.
+
+Now, implement the Percolation data type using the weighted quick union algorithm in WeightedQuickUnionUF. Answer the questions in the previous paragraph.
+
+Deliverables. Submit only Percolation.java (using the weighted quick-union algorithm from WeightedQuickUnionUF) and PercolationStats.java. We will supply algs4.jar. Your submission may not call library functions except those in StdIn, StdOut, StdRandom, StdStats, WeightedQuickUnionUF, and java.lang.
+
+For fun. Create your own percolation input file and share it in the discussion forums. For some inspiration, do an image search for "nonogram puzzles solved."
+
+This assignment was developed by Bob Sedgewick and Kevin Wayne. Copyright © 2008.
+
+
+
+
+
 
 
 
